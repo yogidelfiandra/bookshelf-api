@@ -34,11 +34,7 @@ const addBookHandler = (request, h) => {
     updatedAt,
   };
 
-  books.push(newBook);
-
-  const isSuccess = books.filter((book) => book.id === id).length > 0;
-
-  if (!name) {
+  if (name === undefined) {
     const response = h.response({
       status: 'fail',
       message: 'Gagal menambahkan buku. Mohon isi nama buku',
@@ -55,6 +51,11 @@ const addBookHandler = (request, h) => {
     response.code(400);
     return response;
   }
+
+  books.push(newBook);
+
+  const isSuccess = books.filter((book) => book.id === id).length > 0;
+
   if (isSuccess) {
     const response = h.response({
       status: 'success',
@@ -80,18 +81,22 @@ const getAllBooksHandler = (request, h) => {
 
   let filterBook = books;
 
-  if (name) {
-    filterBook = books.filter((book) =>
+  if (name !== undefined) {
+    filterBook = filterBook.filter((book) =>
       book.name.toLowerCase().includes(name.toLowerCase())
     );
   }
 
-  if (reading) {
-    filterBook = books.filter((book) => book.reading === (reading === '1'));
+  if (reading !== undefined) {
+    filterBook = filterBook.filter(
+      (book) => book.reading === (reading === '1')
+    );
   }
 
-  if (finished) {
-    filterBook = books.filter((book) => book.finished === (finished === '1'));
+  if (finished !== undefined) {
+    filterBook = filterBook.filter(
+      (book) => book.finished === (finished === '1')
+    );
   }
 
   const response = h.response({
